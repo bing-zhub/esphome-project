@@ -1,0 +1,82 @@
+esphome:
+  name: kc868-uair
+  platform: ESP32
+  board: esp32dev
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "978e66f878ed5041b830cfb427393c79"
+
+wifi:
+  ssid: "KinCony" # your wifi router ssid
+  password: "12345678" # your wifi password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Kc868-Uair Fallback Hotspot"
+    password: "FbTxCLlbDvbO"
+
+captive_portal:
+
+# follow configure use for DS18B20 temperature sensor, SHT30 temperature and humidity sensor. WS2812B RGB LEDs.
+i2c:
+  sda: 4
+  scl: 16
+  scan: true
+  id: bus_a
+
+# Example configuration entry
+dallas:
+  - pin: GPIO27
+    update_interval: 15s
+
+# Individual sensors
+sensor:
+  - platform: dallas
+    address: 0xC000000004D81528 # your DS18B20 address
+    name: "internal Temperature"
+
+  # Example configuration entry
+  - platform: sht3xd
+    temperature:
+      name: "extend Temperature"
+    humidity:
+      name: "extend Humidity"
+    address: 0x44
+    update_interval: 15s
+
+light:
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: GPIO32 # Pin Define connected with LED strip
+    num_leds: 4 #LEDs number
+    rgb_order: GRB
+    name: "Uair-Bottom-LED"
+    effects:
+      - addressable_rainbow: ##defined 7 effects styles
+      - addressable_color_wipe:
+      - addressable_scan:
+      - addressable_twinkle:
+      - addressable_random_twinkle:
+      - addressable_fireworks:
+      - addressable_flicker:
+
+  - platform: fastled_clockless
+    chipset: WS2812B
+    pin: GPIO33 # Pin Define connected with LED strip
+    num_leds: 1 #LEDs number
+    rgb_order: RGB
+    name: "Uair-Vertical-LED"
+    effects:
+      - addressable_rainbow: ##defined 7 effects styles
+      - addressable_color_wipe:
+      - addressable_scan:
+      - addressable_twinkle:
+      - addressable_random_twinkle:
+      - addressable_fireworks:
+      - addressable_flicker:
